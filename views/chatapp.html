@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chat Application</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous" />
+</head>
+<style>
+   * {
+      margin: 0px;
+      padding: 0px;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+    }
+    .user{
+      background: #111;
+      height: 50px;
+      display: flex;
+      align-items: center;
+      padding: 0px 20px;
+    }
+    .logo1{
+      font-size: 18px;
+      color: #eee;
+      font-weight: 600;
+    }
+    .app {
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      max-width: 600px;
+      background: #fff;
+      border-left: 1px solid #eee;
+      border-right: 1px solid #eee;
+    }
+    .screen {
+      display: none;
+    }
+    .active {
+      display: block;
+      width: 100%;
+      height: 100%;
+    } 
+     .form {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 80%;
+      max-width: 400px;
+    }
+    .form-input {
+      width: 100%;
+      margin: 20px 0px;
+    }
+     .form h2 {
+      margin-bottom: 0px;
+      font-size: 30px;
+      color: #111;
+      border-bottom: 4px solid#555;
+      padding: 5px 0px;
+      display: inline-block;
+    }
+    .screen .form-input label {
+      display: block;
+      margin-bottom: 5px;
+    }
+    .screen .form-input input {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #555;
+      font-size: 16px;
+    }
+    .screen .form-input button {
+      padding: 10px 20px;
+      background: #111;
+      color: #eee;
+      font-size: 16px;
+      cursor: pointer;
+      outline: none;
+      border: none;
+    }
+    .chat-screen .header {
+      background: #111;
+      height: 50px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0px 20px;
+    }
+    .chat-screen .header .logo {
+      font-size: 18px;
+      color: #eee;
+      font-weight: 600;
+    }
+    .chat-screen .header button {
+      padding: 5px 10px;
+      border: 1px solid #eee;
+      background: transparent;
+      color: #eee;
+      font-size: 15px;
+      cursor: pointer;
+      outline: none;
+    }
+    .chat-screen .messages {
+      width: 100%;
+      height: calc(100% - 100%);
+      background: #f5f5f5;
+      overflow: auto;
+    }
+    .chat-screen .messages .message {
+      display: flex;
+      padding: 10px;
+    }
+     .message > div {
+      max-width: 80%;
+      background: #fff;
+      box-shadow: 0px 0px 20px 5px rgba(0, 0, 0, 0.05);
+      padding: 10px;
+    }
+    .my-message {
+      justify-content: flex-end;
+    }
+    .other-message {
+      justify-content: flex-start;
+    }
+    .msg-area {
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      background-color: #e8e5e5;
+      padding: 10px 20px 10px 2px;
+    }
+    #message-input {
+      width: 80%;
+      padding: 4px;
+      border-radius: 5px;
+      position: relative;
+    }
+    .text-area {
+      float: left;
+      width: 80%;
+    }
+    .send-btn {
+      float: right;
+      width: 10%;
+      
+    }
+    #message-input {
+      padding: 4px;
+      width: 500px;
+    }
+    .messages-area{
+     display: flex;
+     padding: 10px;
+     width: 100%;
+    }
+    .message{
+        max-width: 80%;
+      background: #fff;
+      box-shadow: 0px 0px 20px 5px rgba(0, 0, 0, 0.05);
+      padding: 10px;
+      justify-content: flex-end; 
+      
+    }
+
+    .name {
+        font-size: 13px;
+        color: #555;
+        margin-bottom: 5px;
+    }
+    .text  {
+        word-wrap: break-word;
+    }
+    .update {
+        justify-content:space-around;
+        padding: 10px;
+        font-style: italic;
+    } 
+    .data{
+      background: #111;
+      height: 50px;
+      display: flex;
+      align-items: center;
+      padding: 0px 20px;;
+    }
+    
+  </style>
+  <body>
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-3  ">
+          <div class="row bg-black">
+            <div class="col-12">
+              <div class="header my-2 ">
+                <div class="logo text-white fw-bolder fs-5 py-1">Users</div>                
+            </div>
+            </div>
+          </div> 
+          <div class="row">
+            <div class="col-12">
+              <div class="my-2" id="userList">
+                              
+            </div>
+            </div>
+          </div>          
+        </div>
+        <div class="col-md-6">
+          <div class="app">
+            <div class="screen join-screen">
+              <div class="form">
+                <h2>Join Chatroom</h2>
+              </div>
+                <div class="form-input">
+                  <label>Username</label>
+                  <input type="text" id="username" />
+                </div>
+                <div class="form-input">
+                  <button id="join-user">Join</button>
+                </div> 
+            </div>
+            <div class="screen chat-screen active">
+              <div class="header">
+                <div class="logo">Chatroom</div>
+                <button id="exit-chat" onclick="logout(event)">Exit</button>
+              </div>
+              <div class="messages-area">
+                <div class="my-message">
+                   </div>
+                  
+                  <div class="other-msg"></div>
+                                
+                </div>
+              </div>
+              <div class="typebox msg-area">
+                <div class="text-area">
+                  <input type="text" id="message-input" class="form-control" />
+                </div>
+                <div class="send-btn">
+                  <button id="send-message" class="btn btn-success">Send</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3"></div>
+      </div>
+    </div>
+</body>
+
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script>
+  //parse jwt token
+  function parseJwt(token)
+    {
+ 
+const base64Url = token.split('.')[1]; // Get the base64-encoded payload
+const base64 = base64Url.replace('-', '+').replace('_', '/'); // Replace URL-safe characters
+const payload = JSON.parse(atob(base64)); // Decode and parse the payload
+return payload;
+    }
+    
+  const parent=document.getElementById('userList')
+  const alluser=async()=>{
+    
+      const res=await axios.get("http://localhost:3000/user")
+      const data=res.data.allUsers
+      console.log('userlist>>>>>',data)
+      // const parent=document.getElementById("contact");
+      const localget=localStorage.getItem("token");
+      const decodedToken=parseJwt(localget)
+      console.log("decoded token",decodedToken);
+      // if(res.status===200){
+      //               window.location.href='/login.html'
+
+      //           }
+      //           else{
+      //               console.log('getting error')
+      //           }
+
+      data.forEach(user => {
+        if(decodedToken.name!=user.name && user.status=="online"){
+          const child=document.createElement("li");
+          child.innerText=user.name;
+           parent.appendChild(child);
+
+         }
+       
+        
+      });
+    
+      
+  }
+  alluser()
+
+async function logout(event){
+   event.preventDefault()
+  try{
+    const token=localStorage.getItem("token");
+    const decodedToken=parseJwt(token)
+    const userId=decodedToken.userId;
+    const res=await axios.put(`http://localhost:3000/updateStatus/${userId}`)
+}
+catch(err){
+  console.log('err')
+
+}
+}
+logout()  
+</script>
+
+</html>
